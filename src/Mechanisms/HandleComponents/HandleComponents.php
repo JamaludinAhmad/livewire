@@ -293,10 +293,16 @@ class HandleComponents
 
     protected function updateProperties($component, $updates, $data, $context)
     {
-        foreach ($updates as $path => $value) {
-            $value = $this->hydrateForUpdate($data, $path, $value, $context);
+        try{
+            foreach ($updates as $path => $value) {
+                $value = $this->hydrateForUpdate($data, $path, $value, $context);
+    
+                $this->updateProperty($component, $path, $value, $context);
+            }
+        }
 
-            $this->updateProperty($component, $path, $value, $context);
+        catch(\ReflectionException $e){
+            $updates = [];
         }
     }
 
